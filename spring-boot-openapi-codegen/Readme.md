@@ -83,7 +83,7 @@ under the following URL.
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+TODO: Add information
 
 
 
