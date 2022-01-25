@@ -5,7 +5,7 @@
 
   <p align="center">
     This project demonstrates how to generate servers or clients from a given
-    OpenAPI 3 specification using the API-first development approach with different technologies.
+    OpenAPI 3 specification using different technologies.
     <br />
   </p>
 </p>
