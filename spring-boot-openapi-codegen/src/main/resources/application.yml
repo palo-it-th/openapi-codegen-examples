@@ -17,7 +17,7 @@ spring:
 # Base path configuration for the generated feign client & webclient
 client:
   petstore:
-    base-path: https://petstore3.swagger.io/v3
+    base-path: https://petstore3.swagger.io/api/v3
 
 # Springfox swagger definition path
 springdoc:
