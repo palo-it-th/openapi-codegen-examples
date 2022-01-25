@@ -90,6 +90,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Peter Weismann
-
-[Project Link](https://github.com/pwnmn/spring-boot-openapi-codegen)
+Peter Weismann | pweismann@palo-it.com
