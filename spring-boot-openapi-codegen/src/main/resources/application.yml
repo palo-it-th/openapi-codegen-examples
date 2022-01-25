@@ -28,7 +28,7 @@ springdoc:
 logging:
   level:
     root: INFO
-    com.github.pwnmn: DEBUG
+    com.paloit: DEBUG
 
 # Feign configuration
 feign:
