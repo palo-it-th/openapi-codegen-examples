@@ -1,0 +1,40 @@
+server:
+  port: ${PORT:8090}
+
+spring:
+  application:
+    name: openapi-codegen
+  output:
+    ansi:
+      enabled: always
+  main:
+    banner-mode: "off"
+  # Disables spring security basic auth
+  autoconfigure:
+    exclude[0]: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+    exclude[1]: org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+
+# Base path configuration for the generated feign client & webclient
+client:
+  petstore:
+    base-path: https://petstore3.swagger.io/v3
+
+# Springfox swagger definition path
+springdoc:
+  swagger-ui:
+    path: /openapi
+
+# Logging level configuration
+logging:
+  level:
+    root: INFO
+    com.github.pwnmn: DEBUG
+
+# Feign configuration
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+        loggerLevel: full
