@@ -23,8 +23,8 @@ The following describes some advantages to this approach.
 * API definitions can be shared between teams before implementation is complete
 * Code generation speeds up development process
 
-We will learn the steps of how to design a REST API using the OpenAPI 3 specification and generate both a client (Feign)
-and server (Spring Boot REST) from it.
+We will learn the steps of how to design a REST API using the OpenAPI 3 specification and generate both two clients (Feign & Webclient)
+and server (Spring Boot REST + SpringDoc) from it.
 
 ### Built With
 
@@ -72,13 +72,21 @@ Server (Spring Boot REST)
 The generated classes can be found under the following path
 
   ```sh
-  target/generated-sources/main/java/com.github.pwnmn/**
+  target/generated-sources/main/java/com.paloit/**
+  ```
+
+## Startup
+
+Start the application with the command below.
+
+  ```sh
+  ./mvnw spring-boot:run
   ```
 
 After starting the application, you can access the generated server using Swagger UI
 under the following URL.
 
-  [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+  [http://localhost:8080/openapi](http://localhost:8080/openapi)
 
 <!-- LICENSE -->
 ## License
