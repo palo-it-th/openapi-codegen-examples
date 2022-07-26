@@ -15,10 +15,20 @@ public class WebclientConfig {
 
     private final ObjectMapper objectMapper;
 
+    /**
+     * Autowire Jackson object mapper instance from the JacksonConfig using constructor injection
+     * @param serverMapper objectmapper defined in JacksonConfig.
+     */
     public WebclientConfig(ObjectMapper serverMapper) {
         this.objectMapper = serverMapper;
     }
 
+    /**
+     * Create a new webclient bean instance.
+     *
+     * @param webClientBuilder the webclient builder
+     * @return webclient bean
+     */
     @Bean
     public WebClient generalWebClient(WebClient.Builder webClientBuilder) {
         return WebClient.builder()

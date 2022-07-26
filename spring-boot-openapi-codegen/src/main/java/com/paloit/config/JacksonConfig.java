@@ -17,9 +17,10 @@ public class JacksonConfig {
 
     /**
      * Global object mapper with support for Java Date/Time API and
-     * timestamp settings
-     * @param builder
-     * @return
+     * timestamp settings.
+     *
+     * @param builder jackson2objectmapperbuilder
+     * @return global objectmapper
      */
     @Autowired
     @Bean

@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+/**
+ * Implementation is separated from API definition using the delegate pattern.
+ */
 @Component
 public class PetApiControllerImpl implements PetApiDelegate {
 

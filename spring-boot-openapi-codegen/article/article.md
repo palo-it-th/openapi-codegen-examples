@@ -137,77 +137,156 @@ and server generator, maven profiles have been used as seen below.
 ### Webclient generator configuration
 
 ```xml
-        <profile>
-            <!-- Name of the maven profile for server stub generator-->
-            <id>openapi-server</id>
-            <activation>
-                <property>
-                    <name>generate</name>
-                    <value>swagger</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.openapitools</groupId>
-                        <artifactId>openapi-generator-maven-plugin</artifactId>
-                        <version>${version.openapi-generator}</version>
-                        <executions>
-                            <execution>
-                                <id>generate-code</id>
-                                <goals>
-                                    <goal>generate</goal>
-                                </goals>
-                                <configuration>
-                                    <!-- Spring generator config -->
-                                    <generatorName>spring</generatorName>
-                                    <library>spring-boot</library>
-                                    <!-- Reference to the Petstore spec -->
-                                    <inputSpec>${project.basedir}/src/main/resources/openapi/server/petstore.yml</inputSpec>
-                                    <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
-                                    <!-- Enable API generation -->
-                                    <generateApis>true</generateApis>
-                                    <!-- Enable API documentation generation -->
-                                    <generateApiDocumentation>true</generateApiDocumentation>
-                                    <!-- Do not generate tests -->
-                                    <generateApiTests>false</generateApiTests>
-                                    <!-- Generate models -->
-                                    <generateModels>true</generateModels>
-                                    <generateModelDocumentation>false</generateModelDocumentation>
-                                    <generateModelTests>false</generateModelTests>
-                                    <generateSupportingFiles>true</generateSupportingFiles>
-                                    <!-- Generation output will be in target/generated-sources -->
-                                    <output>${project.build.directory}/generated-sources</output>
-                                    <!-- Model java package name -->
-                                    <modelPackage>${default.package}.server.petstore.model</modelPackage>
-                                    <!-- API java package name --> 
-                                   <apiPackage>${default.package}.server.petstore.api</apiPackage>
-                                    <configOptions>
-                                        <sourceFolder>main/java</sourceFolder>
-                                        <!-- Use modern java8 date/time api -->
-                                        <dateLibrary>java8</dateLibrary>
-                                        <java8>true</java8>
-                                        <oas3>true</oas3>
-                                        <useSpringController>true</useSpringController>
-                                        <useSpringfox>false</useSpringfox>
-                                        <!-- Enable bean validation using javax validation and hibernate validator  -->
-                                        <useBeanValidation>true</useBeanValidation>
-                                        <performBeanValidation>true</performBeanValidation>
-                                        <interfaceOnly>false</interfaceOnly>
-                                        <!-- Use delegate pattern to separate implementation from API definition  -->
-                                        <delegatePattern>true</delegatePattern>
-                                        <useOptional>false</useOptional>
-                                        <!-- Place required parameters first in models  -->
-                                        <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
-                                        <sortParamsByRequiredFlag>true</sortParamsByRequiredFlag>
-                                    </configOptions>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+<profile>
+   <!-- Name of the maven profile for server stub generator-->
+   <id>openapi-server</id>
+   <activation>
+       <property>
+           <name>generate</name>
+           <value>swagger</value>
+       </property>
+   </activation>
+   <build>
+       <plugins>
+           <plugin>
+               <groupId>org.openapitools</groupId>
+               <artifactId>openapi-generator-maven-plugin</artifactId>
+               <version>${version.openapi-generator}</version>
+               <executions>
+                   <execution>
+                       <id>generate-code</id>
+                       <goals>
+                           <goal>generate</goal>
+                       </goals>
+                       <configuration>
+                           <!-- Spring generator config -->
+                           <generatorName>spring</generatorName>
+                           <library>spring-boot</library>
+                           <!-- Reference to the Petstore spec -->
+                           <inputSpec>${project.basedir}/src/main/resources/openapi/server/petstore.yml</inputSpec>
+                           <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
+                           <!-- Enable API generation -->
+                           <generateApis>true</generateApis>
+                           <!-- Enable API documentation generation -->
+                           <generateApiDocumentation>true</generateApiDocumentation>
+                           <!-- Do not generate tests -->
+                           <generateApiTests>false</generateApiTests>
+                           <!-- Generate models -->
+                           <generateModels>true</generateModels>
+                           <generateModelDocumentation>false</generateModelDocumentation>
+                           <generateModelTests>false</generateModelTests>
+                           <generateSupportingFiles>true</generateSupportingFiles>
+                           <!-- Generation output will be in target/generated-sources -->
+                           <output>${project.build.directory}/generated-sources</output>
+                           <!-- Model java package name -->
+                           <modelPackage>${default.package}.server.petstore.model</modelPackage>
+                           <!-- API java package name --> 
+                          <apiPackage>${default.package}.server.petstore.api</apiPackage>
+                           <configOptions>
+                               <sourceFolder>main/java</sourceFolder>
+                               <!-- Use modern java8 date/time api -->
+                               <dateLibrary>java8</dateLibrary>
+                               <java8>true</java8>
+                               <oas3>true</oas3>
+                               <useSpringController>true</useSpringController>
+                               <useSpringfox>false</useSpringfox>
+                               <!-- Enable bean validation using javax validation and hibernate validator  -->
+                               <useBeanValidation>true</useBeanValidation>
+                               <performBeanValidation>true</performBeanValidation>
+                               <interfaceOnly>false</interfaceOnly>
+                               <!-- Use delegate pattern to separate implementation from API definition  -->
+                               <delegatePattern>true</delegatePattern>
+                               <useOptional>false</useOptional>
+                               <!-- Place required parameters first in models  -->
+                               <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
+                               <sortParamsByRequiredFlag>true</sortParamsByRequiredFlag>
+                           </configOptions>
+                       </configuration>
+                   </execution>
+               </executions>
+           </plugin>
+       </plugins>
+   </build>
+</profile>
+```
+
+### Webclient generator configuration
+
+```xml
+<profile>
+   <!-- Name of the maven profile for server stub generator-->
+   <id>openapi-client-webclient</id>
+   <activation>
+      <property>
+         <name>generate</name>
+         <value>swagger</value>
+      </property>
+   </activation>
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>${version.openapi-generator}</version>
+            <executions>
+               <execution>
+                  <id>generate-code</id>
+                  <goals>
+                     <goal>generate</goal>
+                  </goals>
+                  <configuration>
+                     <!-- Webclient generator config -->
+                     <generatorName>java</generatorName>
+                     <library>webclient</library>
+                     
+                     <!-- Reference to the Petstore spec -->
+                     <inputSpec>
+                        ${project.basedir}/src/main/resources/openapi/client/petstore.yml
+                     </inputSpec>
+
+                     <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
+                     <generateApis>true</generateApis>
+                     <generateApiDocumentation>false</generateApiDocumentation>
+                     <generateApiTests>false</generateApiTests>
+                     <generateModels>true</generateModels>
+                     <generateModelDocumentation>false</generateModelDocumentation>
+                     <generateModelTests>false</generateModelTests>
+                     <skipValidateSpec>true</skipValidateSpec>
+                     <generateSupportingFiles>true</generateSupportingFiles>
+                     <output>${project.build.directory}/generated-sources</output>
+                     <!-- Model java package name -->
+                     <modelPackage>${default.package}.client.vitality.core.model</modelPackage>
+                     <!-- API java package name -->
+                     <apiPackage>${default.package}.client.vitality.core.api</apiPackage>
+
+                     <!-- Template to override some default generation template for the webclient -->
+                     <templateDirectory>
+                        ${project.basedir}/src/main/resources/generator-template-overrides/webclient
+                     </templateDirectory>
+                     <configOptions>
+                        <oas3>true</oas3>
+                        <useSpringController>true</useSpringController>
+                        <useSpringfox>false</useSpringfox>
+
+                        <sourceFolder>main/java</sourceFolder>
+                        <!-- Use modern java8 date/time api -->
+                        <dateLibrary>java8</dateLibrary>
+                        <java8>true</java8>
+                        <!-- Do not include any validation with the client -->
+                        <useBeanValidation>false</useBeanValidation>
+                        <performBeanValidation>false</performBeanValidation>
+                        <interfaceOnly>false</interfaceOnly>
+                        <useOptional>false</useOptional>
+                        <!-- Make the models serializable -->
+                        <serializableModel>true</serializableModel>
+                     </configOptions>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+</profile>
 ```
 
 ## Getting Started

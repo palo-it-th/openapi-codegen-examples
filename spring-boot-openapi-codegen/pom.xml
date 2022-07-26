@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.2</version>
+        <version>2.6.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -203,65 +203,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>openapi-client-feign</id>
-            <activation>
-                <property>
-                    <name>generate</name>
-                    <value>swagger</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.openapitools</groupId>
-                        <artifactId>openapi-generator-maven-plugin</artifactId>
-                        <version>${version.openapi-generator}</version>
-                        <executions>
-                            <execution>
-                                <id>generate-code</id>
-                                <goals>
-                                    <goal>generate</goal>
-                                </goals>
-                                <configuration>
-                                    <generatorName>spring</generatorName>
-                                    <library>spring-cloud</library>
-
-                                    <inputSpec>${project.basedir}/src/main/resources/openapi/client/petstore.yml</inputSpec>
-
-                                    <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
-                                    <generateApis>true</generateApis>
-                                    <generateApiDocumentation>true</generateApiDocumentation>
-                                    <generateApiTests>false</generateApiTests>
-                                    <generateModels>true</generateModels>
-                                    <generateModelDocumentation>false</generateModelDocumentation>
-                                    <generateModelTests>false</generateModelTests>
-                                    <generateSupportingFiles>true</generateSupportingFiles>
-
-                                    <output>${project.build.directory}/generated-sources</output>
-                                    <modelPackage>${default.package}.client.petstore.model</modelPackage>
-                                    <apiPackage>${default.package}.client.petstore.api</apiPackage>
-                                    <configOptions>
-                                        <oas3>true</oas3>
-                                        <sourceFolder>main/java</sourceFolder>
-                                        <dateLibrary>java8</dateLibrary>
-                                        <java8>true</java8>
-                                        <useBeanValidation>true</useBeanValidation>
-                                        <performBeanValidation>true</performBeanValidation>
-                                        <interfaceOnly>false</interfaceOnly>
-                                        <useOptional>false</useOptional>
-                                        <serializableModel>true</serializableModel>
-                                        <configPackage>${default.package}.client.petstore.config</configPackage>
-                                    </configOptions>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                 </plugins>
             </build>
         </profile>
