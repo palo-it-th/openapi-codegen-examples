@@ -54,6 +54,9 @@ On a side note, the openapi generator was forked from the [Swagger Codegen](http
 With this tutorial, we will demonstrate how to generate both server-side and client-side code from an openapi v3 specification. The v3 specification
 is the latest openapi spec iteration and extends the older v2 version with numerous new [functionalities and improvements](https://blog.stoplight.io/difference-between-open-v2-v3-v31).
 
+For simplicity's sake, the [Swagger Petstore](https://petstore.swagger.io/) will be used for the generation. It is a simple example REST API demonstrating the capabilities of
+the openapi specification including authorization, HTTP schemes and API descriptions.
+
 ### Server
 
 For the server-side, the generator will output traditional spring web based code.
@@ -65,15 +68,157 @@ we at Palo IT prefer to use the Webclient because it simplifies performing concu
 
 ## Prerequisites
 
-Before getting started, we need to ensure all necessary tools to run the application are available.
+Before getting started, we need to ensure all necessary tools to run the application are available. Installation instructions
+for different 
 
 - [JDK 11](https://www.oracle.com/in/java/technologies/javase/jdk11-archive-downloads.html)
-- [Clone Git Repository](https://github.com/PaloITThailand/openapi-codegen-examples)
+- [Cloned Git Repository](https://github.com/PaloITThailand/openapi-codegen-examples)
 
+## Project structure
+To become familiar with the components and structure of the project, the main areas of interest are depicted below.
+
+The Petstore openapi specification is kept here.
+Both server and client contain the same spec but have been kept in separate folders for simplicity
+```
+.
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── com
+    │   │       └── paloit
+    │   │           ├── client
+    │   │           │   └── petstore
+    │   │           │       ├── feign ->        (1. Generated feign client)
+    │   │           │       │   ├── api
+    │   │           │       │   ├── config
+    │   │           │       │   └── model
+    │   │           │       └── webclient ->    (2. Generated webclient)
+    │   │           │           ├── api
+    │   │           │           ├── apiclient
+    │   │           │           ├── auth
+    │   │           │           └── model
+    │   │           ├── config ->               (3. General project configuration)
+    │   │           └── server
+    │   │               └── petstore ->         (4. Generated server)
+    │   │                   ├── api
+    │   │                   ├── controller
+    │   │                   └── model
+    │   └── resources
+    │       ├── generator-template-overrides -> (5. Generation template adjustment)
+    │       │   └── webclient
+    │       │       └── auth
+    │       └── openapi
+    │           ├── client ->                   (6. Petstore Openapi Spec)
+    │           └── server ->                   (7. Petstore Openapi Spec)
+    └── test
+        └── java
+            └── com
+                └── paloit ->                   (8. Client and Server Tests)
+                    ├── client
+                    │   └── petstore
+                    │       ├── feign
+                    │       └── webclient
+                    └── server
+                        └── petstore
+                            └── controller
+```
+
+1. The generated feign client code
+2. The generated webclient code
+3. Common configuration for the webclient, springdoc api documentation, Jackson serial - and deserializer
+4. The generated spring web server stubs
+5. Adjustment for the generation templates. Sometimes custom adjustments are needed for the generation process if the
+   default templates are not sufficient. More about this in later sections.
+6. Tests for both generated server and client
+
+The configuration for the openapi generator can be found in the pom file. To separate configuration for the two clients
+and server generator, maven profiles have been used as seen below.
+
+### Webclient generator configuration
+
+```xml
+        <profile>
+            <!-- Name of the maven profile for server stub generator-->
+            <id>openapi-server</id>
+            <activation>
+                <property>
+                    <name>generate</name>
+                    <value>swagger</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openapitools</groupId>
+                        <artifactId>openapi-generator-maven-plugin</artifactId>
+                        <version>${version.openapi-generator}</version>
+                        <executions>
+                            <execution>
+                                <id>generate-code</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Spring generator config -->
+                                    <generatorName>spring</generatorName>
+                                    <library>spring-boot</library>
+                                    <!-- Reference to the Petstore spec -->
+                                    <inputSpec>${project.basedir}/src/main/resources/openapi/server/petstore.yml</inputSpec>
+                                    <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
+                                    <!-- Enable API generation -->
+                                    <generateApis>true</generateApis>
+                                    <!-- Enable API documentation generation -->
+                                    <generateApiDocumentation>true</generateApiDocumentation>
+                                    <!-- Do not generate tests -->
+                                    <generateApiTests>false</generateApiTests>
+                                    <!-- Generate models -->
+                                    <generateModels>true</generateModels>
+                                    <generateModelDocumentation>false</generateModelDocumentation>
+                                    <generateModelTests>false</generateModelTests>
+                                    <generateSupportingFiles>true</generateSupportingFiles>
+                                    <!-- Generation output will be in target/generated-sources -->
+                                    <output>${project.build.directory}/generated-sources</output>
+                                    <!-- Model java package name -->
+                                    <modelPackage>${default.package}.server.petstore.model</modelPackage>
+                                    <!-- API java package name --> 
+                                   <apiPackage>${default.package}.server.petstore.api</apiPackage>
+                                    <configOptions>
+                                        <sourceFolder>main/java</sourceFolder>
+                                        <!-- Use modern java8 date/time api -->
+                                        <dateLibrary>java8</dateLibrary>
+                                        <java8>true</java8>
+                                        <oas3>true</oas3>
+                                        <useSpringController>true</useSpringController>
+                                        <useSpringfox>false</useSpringfox>
+                                        <!-- Enable bean validation using javax validation and hibernate validator  -->
+                                        <useBeanValidation>true</useBeanValidation>
+                                        <performBeanValidation>true</performBeanValidation>
+                                        <interfaceOnly>false</interfaceOnly>
+                                        <!-- Use delegate pattern to separate implementation from API definition  -->
+                                        <delegatePattern>true</delegatePattern>
+                                        <useOptional>false</useOptional>
+                                        <!-- Place required parameters first in models  -->
+                                        <sortModelPropertiesByRequiredFlag>true</sortModelPropertiesByRequiredFlag>
+                                        <sortParamsByRequiredFlag>true</sortParamsByRequiredFlag>
+                                    </configOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+```
 
 ## Getting Started
 
+Clone the git repository
 
+```bash
+git clone https://github.com/PaloITThailand/openapi-codegen-examples.git
+```
+
+Import the maven project inside the `spring-boot-openapi-codegen` using your favorite IDE.
 
 
 ## We Are Hiring
