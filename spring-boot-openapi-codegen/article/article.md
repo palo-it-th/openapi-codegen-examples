@@ -22,21 +22,56 @@ This article will focus on utilizing code generation with the popular Spring Boo
 
 ### Openapi specification
 
-The following is a short explanation of what Openapi specifications are. In short, they enable us to easily share definitions of a REST API.
+The following is a short explanation of what Openapi specifications are. In short, they are an open API description format and enable us to easily share definitions of a REST API.
 
-More information on openapi specs can be found following the link below.
 
 > The [OpenAPI Specification](https://swagger.io/specification/) (OAS) defines a standard, language-agnostic interface to RESTful APIs which allows
 > both humans and computers to discover and understand the capabilities of the service without access to source code, documentation, or through network traffic inspection.
 > When properly defined, a consumer can understand and interact with the remote service with a minimal amount of implementation logic.
 
+### Client code
+
+We will refer to client code as any client SDK that enables us to call a remote REST API. In the context of spring boot,
+client code is usually written using HTTP clients such as [Rest Template](https://docs.spring.io/spring-android/docs/current/reference/html/rest-template.html) or
+the more recently introduced [Webclient](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-client).
+
+### Server code
+
+By Server code we will refer to any code necessary to create a REST API server. Using spring boot, this is usually accomplished
+with the servlet api based [Spring Web](https://spring.io/guides/tutorials/rest/) or the newer, non-blocking [Spring Webflux](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html).
+
+### Code generation
+
+The code generation we will learn about in this tutorial will be done using the [Openapi Codegenerator](https://github.com/OpenAPITools/openapi-generator).
+It is a community project widely used by many well-known companies and can generate client code or server stubs from an openapi spec in a multitude of programming languages and frameworks. There are many ways to use the generator.
+It comes as a maven plugin, npm module and standalone JAR. In the following sections we will utilize the maven plugin for convenience purposes since the spring boot project
+uses it as the build management tool.
+
+On a side note, the openapi generator was forked from the [Swagger Codegen](https://github.com/swagger-api/swagger-codegen) to simplify the original and enable stronger community ownership. 
+
+## Tutorial Scope
+
+With this tutorial, we will demonstrate how to generate both server-side and client-side code from an openapi v3 specification. The v3 specification
+is the latest openapi spec iteration and extends the older v2 version with numerous new [functionalities and improvements](https://blog.stoplight.io/difference-between-open-v2-v3-v31).
+
+### Server
+
+For the server-side, the generator will output traditional spring web based code.
+
+### Client
+
+To illustrate how different client code can be generated, we will generate clients with both the aforementioned reactive Webclient and RestTemplate. For our projects,
+we at Palo IT prefer to use the Webclient because it simplifies performing concurrent calls compared with the Rest Template.
 
 ## Prerequisites
 
 Before getting started, we need to ensure all necessary tools to run the application are available.
 
 - [JDK 11](https://www.oracle.com/in/java/technologies/javase/jdk11-archive-downloads.html)
-- [Cloned project repository](https://github.com/PaloITThailand/openapi-codegen-examples)
+- [Clone Git Repository](https://github.com/PaloITThailand/openapi-codegen-examples)
+
+
+## Getting Started
 
 
 
