@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.paloit.client.petstore.feign.api.PetApiClient;
 import com.paloit.client.petstore.webclient.api.PetApi;
 import com.paloit.client.petstore.webclient.model.Pet;
 import org.junit.jupiter.api.Test;

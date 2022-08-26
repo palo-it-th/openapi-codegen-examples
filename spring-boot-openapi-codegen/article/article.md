@@ -14,7 +14,7 @@ The consumers of our API would have to implement a client within their applicati
 With large APIs this can take quite a while. In order to not re-invent the wheel everytime, the OpenApi spec was created.
 It enables us to define our REST API contract in a standardized format and easily share it with others.
 
-Thus an ecosystem of editors and code generation tools were created around the Openapi specification of which the latest version is 3.0.2 at the time of writing.
+Thus an ecosystem of editors and code generation tools were created around the Openapi specification of which the latest version is 3.1 at the time of writing.
 These tools allow us to create API documentation and generate both clients and servers for a vast multitude of programming languages and frameworks.
 This article will focus on utilizing code generation with the popular Spring Boot Java framework which is used in a few of our projects.
 
@@ -298,6 +298,16 @@ git clone https://github.com/PaloITThailand/openapi-codegen-examples.git
 ```
 
 Import the maven project inside the `spring-boot-openapi-codegen` using your favorite IDE.
+
+### Generate client
+
+Navigate to the project using a terminal and execute the following command to generate the client code.
+
+```bash
+./mvnw 
+```
+
+### Generate server
 
 
 ## We Are Hiring
