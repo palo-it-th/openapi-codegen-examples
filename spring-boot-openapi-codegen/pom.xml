@@ -229,8 +229,8 @@
                                     <skipValidateSpec>true</skipValidateSpec>
                                     <generateSupportingFiles>true</generateSupportingFiles>
                                     <output>${project.build.directory}/generated-sources</output>
-                                    <modelPackage>${default.package}.client.vitality.core.model</modelPackage>
-                                    <apiPackage>${default.package}.client.vitality.core.api</apiPackage>
+                                    <modelPackage>${default.package}.client.petstore.webclient.model</modelPackage>
+                                    <apiPackage>${default.package}.client.petstore.webclient.api</apiPackage>
                                     <templateDirectory>
                                         ${project.basedir}/src/main/resources/generator-template-overrides/webclient
                                     </templateDirectory>

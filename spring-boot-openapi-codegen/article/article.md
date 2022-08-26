@@ -1,9 +1,9 @@
-# Spring Boot: Client- and server code generation using Openapi 3 specs 
+# Spring Boot: Client- and server code generation using openapi 3 specs 
 
 REST APIs are ubiquitous in today's world ranging from payments, communication and banking. Developers can plug-in virtually any specialist service they require for their applications.
 
 So it comes as no suprpise that we at Palo IT are frequently developing APIs for our customers and integrating external APIs with our backend applications.
-Both our own APIs and external ones can become rather big and extensive making it quite time consuming to write them all by hand.
+Both, our own APIs and external ones, can become rather big and extensive making it time consuming to write them all by hand.
 Luckily, there are some nifty techniques to make our lives as developers easier and avoid writing repetitive code.
 
 Enter OpenApi 3 specs and code generation!
@@ -11,18 +11,18 @@ Enter OpenApi 3 specs and code generation!
 Imagine someone needs to access our freshly developed API.
 In the past we would share our endpoint definitions using a non-standardized way such as Excel sheets.
 The consumers of our API would have to implement a client within their application.
-With large APIs this can take quite a while. In order to not re-invent the wheel everytime, the OpenApi spec was created.
+With large APIs this can take quite a while. In order to not re-invent the wheel everytime, the openapi spec was created.
 It enables us to define our REST API contract in a standardized format and easily share it with others.
 
-Thus an ecosystem of editors and code generation tools were created around the Openapi specification of which the latest version is 3.1 at the time of writing.
+Thus, an ecosystem of editors and code generation tools were created around the openapi specification of which the latest version is 3.1 at the time of writing.
 These tools allow us to create API documentation and generate both clients and servers for a vast multitude of programming languages and frameworks.
-This article will focus on utilizing code generation with the popular Spring Boot Java framework which is used in a few of our projects.
+This article will focus on utilizing code generation with the popular Java framework spring boot which is used in a few of our projects.
 
 ## Definitions
 
 ### Openapi specification
 
-The following is a short explanation of what Openapi specifications are. In short, they are an open API description format and enable us to easily share definitions of a REST API.
+The following is a short explanation of what an openapi specification is. In short, it is an open application programming interface description format and enables us to easily share definitions of a REST API.
 
 
 > The [OpenAPI Specification](https://swagger.io/specification/) (OAS) defines a standard, language-agnostic interface to RESTful APIs which allows
@@ -32,18 +32,18 @@ The following is a short explanation of what Openapi specifications are. In shor
 ### Client code
 
 We will refer to client code as any client SDK that enables us to call a remote REST API. In the context of spring boot,
-client code is usually written using HTTP clients such as [Rest Template](https://docs.spring.io/spring-android/docs/current/reference/html/rest-template.html) or
+client code is usually written using HTTP clients such as the [Rest Template](https://docs.spring.io/spring-android/docs/current/reference/html/rest-template.html) or
 the more recently introduced [Webclient](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-client).
 
 ### Server code
 
 By Server code we will refer to any code necessary to create a REST API server. Using spring boot, this is usually accomplished
-with the servlet api based [Spring Web](https://spring.io/guides/tutorials/rest/) or the newer, non-blocking [Spring Webflux](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html).
+with the servlet-api based [Spring Web](https://spring.io/guides/tutorials/rest/) or the newer, non-blocking [Spring Webflux](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html).
 
 ### Code generation
 
 The code generation we will learn about in this tutorial will be done using the [Openapi Codegenerator](https://github.com/OpenAPITools/openapi-generator).
-It is a community project widely used by many well-known companies and can generate client code or server stubs from an openapi spec in a multitude of programming languages and frameworks. There are many ways to use the generator.
+It is a community project widely used by many well-known companies and can generate client code or server stubs from an openapi spec in a [multitude of programming languages and frameworks](https://github.com/OpenAPITools/openapi-generator#overview). There are many ways to use the generator.
 It comes as a maven plugin, npm module and standalone JAR. In the following sections we will utilize the maven plugin for convenience purposes since the spring boot project
 uses it as the build management tool.
 
@@ -51,8 +51,8 @@ On a side note, the openapi generator was forked from the [Swagger Codegen](http
 
 ## Tutorial Scope
 
-With this tutorial, we will demonstrate how to generate both server-side and client-side code from an openapi v3 specification. The v3 specification
-is the latest openapi spec iteration and extends the older v2 version with numerous new [functionalities and improvements](https://blog.stoplight.io/difference-between-open-v2-v3-v31).
+With this tutorial, we will demonstrate how to generate both server-side and client-side code from an openapi 3 specification. The v3 specification
+is the latest openapi iteration and extends the older v2 version with numerous new [functionalities and improvements](https://blog.stoplight.io/difference-between-open-v2-v3-v31).
 
 For simplicity's sake, the [Swagger Petstore](https://petstore.swagger.io/) will be used for the generation. It is a simple example REST API demonstrating the capabilities of
 the openapi specification including authorization, HTTP schemes and API descriptions.
@@ -63,13 +63,13 @@ For the server-side, the generator will output traditional spring web based code
 
 ### Client
 
-To illustrate how different client code can be generated, we will generate clients with both the aforementioned reactive Webclient and RestTemplate. For our projects,
-we at Palo IT prefer to use the Webclient because it simplifies performing concurrent calls compared with the Rest Template.
+To illustrate the client code generation, the reactive WebClient will be used. For our projects,
+we at Palo IT prefer to use the Webclient because it simplifies performing concurrent calls compared to the Rest Template.
 
 ## Prerequisites
 
-Before getting started, we need to ensure all necessary tools to run the application are available. Installation instructions
-for different 
+Before getting started, we need to ensure all necessary tools to run the application are available. The tools and installation
+instruction are below.
 
 - [JDK 11](https://www.oracle.com/in/java/technologies/javase/jdk11-archive-downloads.html)
 - [Cloned Git Repository](https://github.com/PaloITThailand/openapi-codegen-examples)
@@ -88,50 +88,44 @@ Both server and client contain the same spec but have been kept in separate fold
     │   │       └── paloit
     │   │           ├── client
     │   │           │   └── petstore
-    │   │           │       ├── feign ->        (1. Generated feign client)
-    │   │           │       │   ├── api
-    │   │           │       │   ├── config
-    │   │           │       │   └── model
-    │   │           │       └── webclient ->    (2. Generated webclient)
+    │   │           │       └── webclient ->    1. Generated webclient
     │   │           │           ├── api
     │   │           │           ├── apiclient
     │   │           │           ├── auth
     │   │           │           └── model
-    │   │           ├── config ->               (3. General project configuration)
+    │   │           ├── config ->               2. General project configuration
     │   │           └── server
-    │   │               └── petstore ->         (4. Generated server)
+    │   │               └── petstore ->         3. Generated server
     │   │                   ├── api
     │   │                   ├── controller
     │   │                   └── model
     │   └── resources
-    │       ├── generator-template-overrides -> (5. Generation template adjustment)
+    │       ├── generator-template-overrides -> 4. Generation template adjustment
     │       │   └── webclient
     │       │       └── auth
     │       └── openapi
-    │           ├── client ->                   (6. Petstore Openapi Spec)
-    │           └── server ->                   (7. Petstore Openapi Spec)
+    │           ├── client ->                   5. Client - Petstore Openapi Spec
+    │           └── server ->                   6. Server - Petstore Openapi Spec
     └── test
         └── java
             └── com
-                └── paloit ->                   (8. Client and Server Tests)
+                └── paloit ->                   7. Client and Server Tests
                     ├── client
                     │   └── petstore
-                    │       ├── feign
                     │       └── webclient
                     └── server
                         └── petstore
                             └── controller
 ```
 
-1. The generated feign client code
-2. The generated webclient code
-3. Common configuration for the webclient, springdoc api documentation, Jackson serial - and deserializer
-4. The generated spring web server stubs
-5. Adjustment for the generation templates. Sometimes custom adjustments are needed for the generation process if the
+1. The generated webclient code
+2. Common configuration for the webclient, springdoc api documentation, Jackson parser
+3. The generated spring web server stubs
+4. Adjustment for the generation templates. Sometimes custom adjustments are needed for the generation process if the
    default templates are not sufficient. More about this in later sections.
-6. Tests for both generated server and client
+5. Tests for both generated server and client
 
-The configuration for the openapi generator can be found in the pom file. To separate configuration for the two clients
+The configuration for the openapi generator can be found in the pom file. To separate configuration for the client-
 and server generator, maven profiles have been used as seen below.
 
 ### Webclient generator configuration
@@ -304,7 +298,76 @@ Import the maven project inside the `spring-boot-openapi-codegen` using your fav
 Navigate to the project using a terminal and execute the following command to generate the client code.
 
 ```bash
-./mvnw 
+./mvnw clean generate-sources -P openapi-client-webclient
+```
+
+The generated code can be found in the following directory.
+
+```
+└── target
+    └── generated-sources
+        ├── api
+        └── main
+            └── java
+                └── com
+                    └── paloit
+                        └── client
+                            └── petstore
+                                └── webclient
+                                    ├── api                       1. Generated APIs         - api
+                                    ├── auth                      2. Shared support files   - auth
+                                    ├── model                     3. Generated models       - model
+                                    ├── ApiClient.java            4. Shared support files   - apiclient
+                                    ├── JavaTimeFormatter.java    4. Shared support files   - apiclient
+                                    ├── RFC3339DateFormat.java    4. Shared support files   - apiclient
+                                    ├── ServerConfiguration.java  4. Shared support files   - apiclient
+                                    ├── ServerVariable.java       4. Shared support files   - apiclient
+                                    └── StringUtil.java           4. Shared support files   - apiclient
+```
+
+1. Contains the generated apis
+2. Shared classes related to authorization
+3. Contains the generated models
+4. Re-usable shared support classes
+
+After the generation is complete, the API and model packages (1. and 3.) are copied to `com.paloit.clientpetstore.webclient`.
+The support and authorization classes are copied as well and contained in the `apiclient` and `auth` packages.
+
+#### Client initialization & usage
+
+The client has to be defined as a spring bean. This is done within the `com.paloit.config.ApiClientConfig` class. A simple example
+is depicted below and should be self-explanatory. 
+
+```java
+/**
+ * ApiClientConfig and webclient is re-used for different APIs
+ */
+@Configuration
+public class ApiClientConfig {
+   /**
+    * 
+    * @param webclient The re-usable webclient defined in the WebclientConfig class
+    * @param petstoreBasePath Base path of the client is defined in the application.yaml
+    */
+   public ApiClientConfig(
+           WebClient webclient,
+           @Value("${client.petstore.base-path}") String petstoreBasePath
+   ) {
+      this.webclient = webclient;
+      this.petstoreBasePath = petstoreBasePath;
+   }
+
+   /**
+    * Client is defined as a spring bean and can be autowired in other spring beans
+    * @return
+    */
+   @Bean
+   public PetApi petClient() {
+      return new PetApi(
+              new ApiClient(webclient).setBasePath(petstoreBasePath)
+      );
+   }
+}
 ```
 
 ### Generate server

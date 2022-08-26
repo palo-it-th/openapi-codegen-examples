@@ -1,4 +1,4 @@
-package com.paloit.client.config;
+package com.paloit.config;
 
 import com.paloit.client.petstore.webclient.api.PetApi;
 import com.paloit.client.petstore.webclient.api.StoreApi;
