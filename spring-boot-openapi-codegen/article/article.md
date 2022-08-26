@@ -372,9 +372,86 @@ public class ApiClientConfig {
 
 ### Generate server
 
+The server is generated in a similar fashion and illustrates the API first development approach. The openapi spec is created
+first and a server stub generated from it. The development team then adds implementations for the API.
+
+In order to be able to re-generate the server at any time without affecting the implementations, the delegate pattern is utilized and
+wil be further explained before.
+
+Navigate to the project root using a terminal and execute the following command to generate the server code.
+
+```bash
+./mvnw clean generate-sources -P openapi-server
+```
+
+The generated code can again be found under the target folder.
+
+```
+└── target
+    └── generated-sources
+        └── main
+            └── java
+                └── com
+                    └── paloit
+                        └── server
+                            └── petstore
+                                ├── api                           1. Generated APIs using delegate pattern
+                                │   ├── ApiUtil.java
+                                │   ├── PetApi.java
+                                │   ├── PetApiController.java
+                                │   ├── PetApiDelegate.java
+                                │   ├── StoreApi.java
+                                │   ├── StoreApiController.java
+                                │   ├── StoreApiDelegate.java
+                                │   ├── UserApi.java
+                                │   ├── UserApiController.java
+                                │   └── UserApiDelegate.java
+                                └── model                         2. Generated models
+                                    ├── Address.java
+                                    ├── Category.java
+                                    ├── Customer.java
+                                    ├── ModelApiResponse.java
+                                    ├── Order.java
+                                    ├── Pet.java
+                                    ├── Tag.java
+                                    └── User.java
+```
+
+After completing the generation, the api and model packages are copied to the `server.petstore` package. The implementations will be
+kept in the `controller` package and have to implement the delegate interfaces. The delegate interfaces define default implementations for
+all APIs and return a HTTP 501 (Not Implemented) if not overridden.
+
+An example on how to add the API implementation is below.
+
+```java
+@Component
+public class PetApiControllerImpl implements PetApiDelegate {
+
+    @Override
+    public ResponseEntity<Pet> getPetById(Long petId) {
+        if(petId == 1l) {
+            var pet = new Pet();
+            pet.setId(1l);
+            pet.setName("Bear");
+            pet.setStatus(StatusEnum.AVAILABLE);
+            return ResponseEntity.ok(pet);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<Pet> addPet(Pet pet) {
+        // TODO: Add implementation...
+        return new ResponseEntity(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    // TODO: Override methods from delegate and implement
+}
+```
+
 
 ## We Are Hiring
 
-[Palo IT (Thailand)](https://www.palo-it.com/th/) is always looking for passionate developers to join our teams.
-Interested in learning, coding, and applying cutting edges technologies to empower our customers and make the world a better place?
-Apply at [https://www.palo-it.com/th/career](https://www.palo-it.com/th/career)!
+[PALO IT Thailand](https://www.palo-it.com/th/) is always looking for passionate developers to join our teams.
+Are you interested in learning, coding, and applying cutting edges technologies to empower our customers and make the world a better place?
+Don't think twice and apply [here](https://www.palo-it.com/th/career)!
