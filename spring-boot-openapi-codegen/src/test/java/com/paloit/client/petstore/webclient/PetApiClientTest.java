@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.paloit.client.petstore.webclient.api.PetApi;
 import com.paloit.client.petstore.webclient.model.Pet;
+import com.paloit.client.petstore.webclient.model.Pet.StatusEnum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,25 @@ import reactor.core.publisher.Mono;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class PetApiClientTest {
 
-    @Autowired
     private PetApi petApiClient;
+
+    @Autowired
+    public PetApiClientTest(PetApi petApiClient) {
+        this.petApiClient = petApiClient;
+    }
 
     /**
      * Simple webclient call.
      */
     @Test
     public void getPetById_ValidId_200_ReturnPet_simple() {
-        var petId = 1l;
+        var petId = 9999567l;
+
+        this.createPet(petId, "Horse");
         Pet pet = petApiClient.getPetById(petId).block();
 
         assertThat(pet.getName()).isNotEmpty();
-        assertThat(pet.getId()).isEqualTo(1l);
+        assertThat(pet.getId()).isEqualTo(petId);
     }
 
     /**
@@ -38,7 +45,8 @@ public class PetApiClientTest {
      */
     @Test
     public void getPetById_ValidId_200_ReturnPet_extended() {
-        var petId = 1l;
+        var petId = 9999568l;
+        createPet(petId, "Horse");
         Pet pet = petApiClient.getPetByIdRequestCreation(petId)
             .onStatus(HttpStatus::isError, (response) -> {
                 // Handle errors here!
@@ -60,7 +68,15 @@ public class PetApiClientTest {
             .block();
 
         assertThat(pet.getName()).isNotEmpty();
-        assertThat(pet.getId()).isEqualTo(1l);
+        assertThat(pet.getId()).isEqualTo(petId);
+    }
+
+    private void createPet(long petId, String petName) {
+        var petToBeCreated = new Pet();
+        petToBeCreated.setId(petId);
+        petToBeCreated.setName(petName);
+        petToBeCreated.setStatus(StatusEnum.AVAILABLE);
+        petApiClient.addPetRequestCreation(petToBeCreated).toBodilessEntity().block();
     }
 
     // Add further tests...

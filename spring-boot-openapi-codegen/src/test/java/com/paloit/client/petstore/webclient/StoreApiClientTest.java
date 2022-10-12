@@ -16,8 +16,12 @@ import reactor.core.publisher.Mono;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class StoreApiClientTest {
 
-    @Autowired
     private StoreApi storeApiClient;
+
+    @Autowired
+    StoreApiClientTest(StoreApi storeApiClient) {
+        this.storeApiClient = storeApiClient;
+    }
 
     /**
      * Simple webclient call.

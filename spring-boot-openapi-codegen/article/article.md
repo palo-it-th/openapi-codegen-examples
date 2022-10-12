@@ -340,7 +340,7 @@ The support and authorization classes are copied as well and contained in the `a
 #### Client initialization & usage
 
 The client has to be defined as a spring bean. This is done within the `com.paloit.config.ApiClientConfig` class. A simple example
-is depicted below and should be self-explanatory. 
+is depicted below and should be self-explanatory.
 
 ```java
 /**
@@ -374,13 +374,75 @@ public class ApiClientConfig {
 }
 ```
 
+After defining the `PetApi` as a bean, it can be autowired and used to call the external API as illustrated below.
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+public class PetApiClientTest {
+
+   private PetApi petApiClient;
+
+   @Autowired
+   public PetApiClientTest(PetApi petApiClient) {
+      this.petApiClient = petApiClient;
+   }
+
+   /**
+    * Simple webclient call.
+    */
+   @Test
+   public void getPetById_ValidId_200_ReturnPet_simple() {
+      var petId = 1l;
+      Pet pet = petApiClient.getPetById(petId).block();
+
+      assertThat(pet.getName()).isNotEmpty();
+      assertThat(pet.getId()).isEqualTo(1l);
+   }
+}
+```
+
+#### Custom generator templates
+
+The openapi generator uses [mustache templates](https://openapi-generator.tech/docs/templating/) to generate client implementations or server stubs. For the majority of cases,
+these are sufficient to be used out-of-the-box. For custom use cases, these can be adjusted to generate the desired code.
+
+The templates can be overridden with the openapi generator maven configuration using the `templateDirectory` tag. If a template with the same file name as the original
+is found in the specified directory, it will override the default template.
+
+```xml
+   <templateDirectory>
+       ${project.basedir}/src/main/resources/generator-template-overrides/webclient
+   </templateDirectory>
+```
+
+In this example, the generator templates are used to change a modifier with the generated client to access the ResponseSpec and enable us to have fine-grained
+handling of http errors. By default, the PetApi client method `addPet` only returns a Mono as seen below and the `addPetRequestCreation` method is private.
+
+The provided templates are changed so that the `addPetRequestCreation` method becomes public and accessible.
+
+```java
+public class PetApi {
+
+   public ResponseSpec addPetRequestCreation(Pet pet) throws WebClientResponseException {
+       implementation...
+   }
+
+   public Mono<Pet> addPet(Pet pet) throws WebClientResponseException {
+       implementation...
+   }
+}
+```
+
 ### Generate server
 
-The server is generated in a similar fashion and illustrates the API first development approach. The openapi spec is created
+The server is generated in a similar fashion and illustrates the [API first development approach](https://swagger.io/resources/articles/adopting-an-api-first-approach/). The openapi spec is created
 first and a server stub generated from it. The development team then adds implementations for the API.
 
 In order to be able to re-generate the server at any time without affecting the implementations, the delegate pattern is utilized and
-wil be further explained before.
+wil be further explained below.
 
 Navigate to the project root using a terminal and execute the following command to generate the server code.
 
@@ -425,7 +487,10 @@ After completing the generation, the api and model packages are copied to the `s
 kept in the `controller` package and have to implement the delegate interfaces. The delegate interfaces define default implementations for
 all APIs and return a HTTP 501 (Not Implemented) if not overridden.
 
-An example on how to add the API implementation is below.
+The `PetApiController` uses either the default `PetApiDelegate` if we do not define our own. However, if we define our own with custom implementations as depicted below,
+it will be automatically used.
+
+Note that our delegate implementation has to be a spring bean and the `@Component` annotation is added on top of the class.
 
 ```java
 @Component
@@ -452,9 +517,17 @@ public class PetApiControllerImpl implements PetApiDelegate {
     // TODO: Override methods from delegate and implement
 }
 ```
+The delegate pattern effectively separates the definition of the API from its implementation and both can be modified independently. The default delegate, api and models
+can be re-generated without affecting the implementation and vice-versa.
+
+## Conclusion
+
+In this article, we have demonstrated how speed up development with spring boot using client- and server code generation. Using these techniques has helped us at PALO IT Thailand to rapidly 
+develop our own REST APIs and integrate external ones with our applications. By openly sharing our approach, we hope that it will benefit you, our dear readers, and spark some interest in our other practices that
+we will be writing about in the near future.
 
 
-## We Are Hiring
+### We Are Hiring
 
 [PALO IT Thailand](https://www.palo-it.com/th/) is always looking for passionate developers to join our teams.
 Are you interested in learning, coding, and applying cutting edges technologies to empower our customers and make the world a better place?
