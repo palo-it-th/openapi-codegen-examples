@@ -3,7 +3,7 @@
 REST APIs are ubiquitous in today's world ranging from payments, communication and banking. Developers can plug-in virtually any specialist service they require for their applications.
 
 So it comes as no suprpise that we at Palo IT are frequently developing APIs for our customers and integrating external APIs with our backend applications.
-Both, our own APIs and external ones, can become rather big and extensive making it time consuming to write them all by hand.
+Both, our own APIs and external ones, can become rather big and extensive, making it time consuming to write them all by hand.
 Luckily, there are some nifty techniques to make our lives as developers easier and avoid writing repetitive code.
 
 Enter OpenApi 3 specs and code generation!
@@ -19,6 +19,8 @@ These tools allow us to create API documentation and generate both clients and s
 This article will focus on utilizing code generation with the popular Java framework spring boot which is used in a few of our projects.
 
 ## Definitions
+
+Before we jump into the code, some definitions have to be established to fully understand the terms.
 
 ### Openapi specification
 
@@ -65,6 +67,8 @@ For the server-side, the generator will output traditional spring web based code
 
 To illustrate the client code generation, the reactive WebClient will be used. For our projects,
 we at Palo IT prefer to use the Webclient because it simplifies performing concurrent calls compared to the Rest Template.
+Also, the RestTemplate is no longer in active development and remains in [maintenance mode](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html). Thus, the WebClient should be preferred
+for new projects.
 
 ## Prerequisites
 
@@ -285,7 +289,7 @@ and server generator, maven profiles have been used as seen below.
 
 ## Getting Started
 
-Clone the git repository
+Clone the git repository.
 
 ```bash
 git clone https://github.com/PaloITThailand/openapi-codegen-examples.git
