@@ -302,6 +302,7 @@ Import the maven project inside the `spring-boot-openapi-codegen` using your fav
 Navigate to the project using a terminal and execute the following command to generate the client code.
 
 ```bash
+cd spring-boot-openapi-codegen
 ./mvnw clean generate-sources -P openapi-client-webclient
 ```
 
@@ -427,11 +428,11 @@ The provided templates are changed so that the `addPetRequestCreation` method be
 public class PetApi {
 
    public ResponseSpec addPetRequestCreation(Pet pet) throws WebClientResponseException {
-       implementation...
+       // implementation...
    }
 
    public Mono<Pet> addPet(Pet pet) throws WebClientResponseException {
-       implementation...
+       // implementation...
    }
 }
 ```
