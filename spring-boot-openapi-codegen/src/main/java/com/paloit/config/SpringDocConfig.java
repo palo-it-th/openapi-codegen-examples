@@ -16,15 +16,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringDocConfig {
 
-    private static final String DATE_TIME_PATTERN = "MM-dd-yyyy HH:mm:ss";
+    private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
     private final GitProperties gitProperties;
-    private final String environment;
 
     public SpringDocConfig(
-        @Value(value = "${spring.profiles.active:Not specified}") String environment,
         @Autowired(required = false) GitProperties gitProperties) {
         this.gitProperties = gitProperties;
-        this.environment = environment;
     }
 
     @Bean
@@ -33,8 +30,7 @@ public class SpringDocConfig {
             .info(new Info().title("Openapi 3 Codegen API")
                 .description(
                     String.format(
-                        "``` Environment: %s```<br>%s",
-                        environment, gitInfo()
+                        "<br>%s", gitInfo()
                     )
                 )
                 .version("v0.0.1"))

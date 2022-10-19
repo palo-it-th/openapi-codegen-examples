@@ -44,12 +44,12 @@ with the servlet-api based [Spring Web](https://spring.io/guides/tutorials/rest/
 
 ### Code generation
 
-The code generation we will learn about in this tutorial will be done using the [Openapi Codegenerator](https://github.com/OpenAPITools/openapi-generator).
+The code generation we will learn about in this tutorial will be done using the [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator).
 It is a community project widely used by many well-known companies and can generate client code or server stubs from an openapi spec in a [multitude of programming languages and frameworks](https://github.com/OpenAPITools/openapi-generator#overview). There are many ways to use the generator.
 It comes as a maven plugin, npm module and standalone JAR. In the following sections we will utilize the maven plugin for convenience since the Spring Boot project
 uses it as the build management tool.
 
-On a side note, the Openapi generator was forked from the [Swagger Codegen](https://github.com/swagger-api/swagger-codegen) to simplify the original and enable stronger community ownership. 
+On a side note, the OpenAPI Generator was forked from the [Swagger Codegen](https://github.com/swagger-api/swagger-codegen) to simplify the original and enable stronger community ownership. 
 
 ## Tutorial Scope
 
@@ -129,7 +129,7 @@ Both server and client contain the same spec but have been kept in separate fold
    default templates are not sufficient. More about this in [Custom generator templates](#custom-generator-templates)
 5. Tests for both generated server and client
 
-The configuration for the Openapi generator can be found in the pom file. To separate configuration for the client-
+The configuration for the OpenAPI Generator can be found in the pom file. To separate configuration for the client-
 and server generator, maven profiles have been used as seen below.
 
 ### Spring Web server generator configuration
@@ -289,7 +289,7 @@ and server generator, maven profiles have been used as seen below.
 
 ## Getting Started
 
-Clone the git repository.
+Clone the Git repository.
 
 ```bash
 git clone https://github.com/PaloITThailand/openapi-codegen-examples.git
@@ -411,10 +411,12 @@ public class PetApiClientTest {
 
 #### Custom generator templates
 
-The openapi generator uses [mustache templates](https://openapi-generator.tech/docs/templating/) to generate client implementations or server stubs. For the majority of cases,
-these are sufficient to be used out-of-the-box. For custom use cases, these can be adjusted to generate the desired code.
+The OpenAPI Generator uses [mustache templates](https://openapi-generator.tech/docs/templating/) to generate client implementations or server stubs. For the majority of cases,
+these are sufficient to be used out-of-the-box. For custom use cases, they can be adjusted to generate the desired code.
 
-The templates can be overridden with the openapi generator maven configuration using the `templateDirectory` tag. If a template with the same file name as the original
+The templates for all programming languages supported by the generator can be found in their [git repository](https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator/src/main/resources/).
+
+The templates can be overridden with the OpenAPI Generator maven configuration using the `templateDirectory` tag. If a template with the same file name as the original
 is found in the specified directory, it will override the default template.
 
 ```xml
@@ -423,15 +425,16 @@ is found in the specified directory, it will override the default template.
    </templateDirectory>
 ```
 
+The overridden templates for the WebClient were copied to the local `/src/main/resources/generator-template-overrides/webclient` directory from
+the [openapi-generator/src/main/resources/Java/libraries/webclient](https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator/src/main/resources/Java/libraries/webclient) folder in the OpenAPI Generator Git repository.
+
 In this example, the generator templates are used to change a modifier with the generated client to access the ResponseSpec and enable us to have fine-grained
 handling of http errors. By default, the PetApi client method `addPet` only returns a Mono as seen below and the `addPetRequestCreation` method is private.
-
-The provided templates are changed so that the `addPetRequestCreation` method becomes public and accessible.
 
 ```java
 public class PetApi {
 
-   public ResponseSpec addPetRequestCreation(Pet pet) throws WebClientResponseException {
+   private ResponseSpec addPetRequestCreation(Pet pet) throws WebClientResponseException {
        // implementation...
    }
 
@@ -440,6 +443,13 @@ public class PetApi {
    }
 }
 ```
+
+The `api.mustache` template is changed at line 72 so that the `addPetRequestCreation` method becomes public and accessible. The relevant
+change is depicted below in bold.
+
+<pre>
+<b>public</b> ResponseSpec {{operationId}}RequestCreation
+</pre>
 
 ### Generate server
 
@@ -525,9 +535,24 @@ public class PetApiControllerImpl implements PetApiDelegate {
 The delegate pattern effectively separates the definition of the API from its implementation and both can be modified independently. The default delegate, api and models
 can be re-generated without affecting the implementation and vice-versa.
 
+### Run application
+
+Use below command to start the application. A swagger UI web interface can be accessed under [http://localhost:8090/openapi](http://localhost:8090/openapi) to
+inspect and interact with the REST API.
+
+```bash
+./mvnw spring-boot:run
+```
+
+### Run tests
+
+```bash
+./mvnw clean verify
+```
+
 ## Conclusion
 
-In this article, we have demonstrated how speed up development with spring boot using client- and server code generation. Using these techniques has helped us at PALO IT Thailand to rapidly 
+In this article, we have demonstrated how to speed up development with Spring Boot using client- and server code generation. Using these techniques has helped us at PALO IT Thailand to rapidly 
 develop our own REST APIs and integrate external ones with our applications. By openly sharing our approach, we hope that it will benefit you, our dear readers, and spark some interest in our other practices that
 we will be writing about in the near future.
 
@@ -536,4 +561,5 @@ we will be writing about in the near future.
 
 [PALO IT Thailand](https://www.palo-it.com/th/) is always looking for passionate developers to join our teams.
 Are you interested in learning, coding, and applying cutting edges technologies to empower our customers and make the world a better place?
+
 Don't think twice and apply [here](https://www.palo-it.com/th/career)!
