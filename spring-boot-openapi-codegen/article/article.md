@@ -92,28 +92,28 @@ Both server and client contain the same spec but have been kept in separate fold
     │   │       └── paloit
     │   │           ├── client
     │   │           │   └── petstore
-    │   │           │       └── webclient ->    1. Generated webclient
+    │   │           │       └── webclient       1. Generated webclient
     │   │           │           ├── api
     │   │           │           ├── apiclient
     │   │           │           ├── auth
     │   │           │           └── model
-    │   │           ├── config ->               2. General project configuration
+    │   │           ├── config                  2. General project configuration
     │   │           └── server
-    │   │               └── petstore ->         3. Generated server
+    │   │               └── petstore            3. Generated server
     │   │                   ├── api
     │   │                   ├── controller
     │   │                   └── model
     │   └── resources
-    │       ├── generator-template-overrides -> 4. Generation template adjustment
+    │       ├── generator-template-overrides    4. Generation template adjustment
     │       │   └── webclient
-    │       │       └── auth
+    │       │       
     │       └── openapi
-    │           ├── client ->                   5. Client - Petstore Openapi Spec
-    │           └── server ->                   6. Server - Petstore Openapi Spec
+    │           ├── client                      5. Client - Petstore Openapi Spec
+    │           └── server                      6. Server - Petstore Openapi Spec
     └── test
         └── java
             └── com
-                └── paloit ->                   7. Client and Server Tests
+                └── paloit                      7. Client and Server Tests
                     ├── client
                     │   └── petstore
                     │       └── webclient
