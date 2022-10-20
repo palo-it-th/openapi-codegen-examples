@@ -1,4 +1,4 @@
-# Spring Boot: Client- and erver code generation using OpenAPI 3 Specs 
+# Spring Boot: Client- and server code generation using OpenAPI 3 Specs 
 
 REST APIs are ubiquitous in today's world ranging from payments, communication and banking. Developers can plug-in virtually any specialist service they require for their applications.
 
